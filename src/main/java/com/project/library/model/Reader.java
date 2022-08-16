@@ -1,9 +1,11 @@
 package com.project.library.model;
 
+
 import java.util.List;
 
+
 public class Reader extends User{
-    
+
     private boolean state;
     private List<Order> orders;
     private List<Subscription> subscriptions;
