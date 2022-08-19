@@ -1,6 +1,6 @@
 package com.project.library.service;
 import com.project.library.interfaceService.IBookService;
-import com.project.library.interfaces.IBook;
+import com.project.library.Db.BookRepository;
 import com.project.library.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class BookService implements IBookService {
     @Autowired
-    private IBook dataBook;
+    private BookRepository dataBook;
     @Override
     public List<Book> listBook() {
         return (List<Book>)dataBook.findAll();

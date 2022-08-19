@@ -1,10 +1,6 @@
 package com.project.library.controller;
-import com.project.library.interfaceService.IBookService;
-import com.project.library.interfaceService.IOrderService;
-import com.project.library.interfaceService.IUserService;
-import com.project.library.model.Book;
+import com.project.library.Db.OrderRepository;
 import com.project.library.model.Order;
-import com.project.library.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping
+@RequestMapping("/order")
 public class OrderController {
     @Autowired
-    private IOrderService OService;
+    private OrderRepository orderRepository;
 
     @GetMapping
     public String listOrder(Model model) {
-        List<Order> orders= OService.listOrder();
+        List<Order> orders= (List<Order>) orderRepository.findAll();
         model.addAttribute("orders", orders);
         return "index";
     }

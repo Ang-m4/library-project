@@ -1,6 +1,6 @@
 package com.project.library.controller;
 
-import com.project.library.interfaceService.IUserService;
+import com.project.library.Db.UserRepository;
 import com.project.library.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping
+@RequestMapping("/user")
 public class UserController {
     @Autowired
-    private IUserService UService;
+    private UserRepository userRepository;
 
     @GetMapping
     public String listUser(Model model) {
-        List<User> users= UService.listUser();
+        List<User> users= (List<User>)userRepository.findAll();
         model.addAttribute("users", users);
         return "index";
     }

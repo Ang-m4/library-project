@@ -1,7 +1,7 @@
 package com.project.library.service;
 
 import com.project.library.interfaceService.IUserService;
-import com.project.library.interfaces.IUser;
+import com.project.library.Db.UserRepository;
 import com.project.library.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class UserService implements IUserService {
     @Autowired
-    private IUser dataUser;
+    private UserRepository dataUser;
     @Override
     public List<User> listUser() {
         return (List<User>)dataUser.findAll();

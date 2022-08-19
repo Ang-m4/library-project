@@ -1,7 +1,7 @@
 package com.project.library.service;
 
 import com.project.library.interfaceService.IOrderService;
-import com.project.library.interfaces.IOrder;
+import com.project.library.Db.OrderRepository;
 import com.project.library.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class OrderService implements IOrderService {
     @Autowired
-    private IOrder dataOrder;
+    private OrderRepository dataOrder;
     @Override
     public List<Order> listOrder() {
         return (List<Order>)dataOrder.findAll();
