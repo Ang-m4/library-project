@@ -1,13 +1,9 @@
 package com.project.library.model;
 
-import javax.persistence.*;
 import java.time.*;
 
-@Entity
-@Table(name = "Books")
 public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+  
     private long isbn;
     private String name;
     private String author;

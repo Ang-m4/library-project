@@ -1,14 +1,10 @@
 package com.project.library.model;
 
-import javax.persistence.*;
 import java.util.List;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "Orders")
 public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private long id;
     private Reader reader;
     private List<Book> books;
@@ -55,7 +51,5 @@ public class Order {
     public void setRequestDate(LocalDate requestDate) {
         this.requestDate = requestDate;
     }
-
-    
 
 }
