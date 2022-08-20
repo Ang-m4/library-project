@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Subscription{
 
-    private long id;
+    private Long id;
     private Reader reader;
     private List<Book> books;
     private LocalDate givenDate;

@@ -1,11 +1,12 @@
 package com.project.library.model;
 
 import java.util.List;
+
 import java.time.LocalDate;
 
 public class Order {
 
-    private long id;
+    private Long id;
     private Reader reader;
     private List<Book> books;
     private LocalDate requestDate;

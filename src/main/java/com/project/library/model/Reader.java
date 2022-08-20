@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Reader{
 
-    private long id;
+    private Long id;
     private String name;
     private String lastname;
     private String password;

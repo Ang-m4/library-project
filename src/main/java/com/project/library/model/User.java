@@ -2,7 +2,7 @@ package com.project.library.model;
 
 public class User {
 
-    private long id;
+    private Long id;
     private String name;
     private String lastname;
     private String password;

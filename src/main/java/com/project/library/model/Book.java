@@ -2,9 +2,16 @@ package com.project.library.model;
 
 import java.time.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Books")
 public class Book {
-  
-    private long isbn;
+    
+    @Id
+    private Long isbn;
     private String name;
     private String author;
     private LocalDate publishDate;
@@ -70,7 +77,5 @@ public class Book {
     public void setPublish(String publish) {
         this.publish = publish;
     }
-
-    
 
 }

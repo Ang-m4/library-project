@@ -12,13 +12,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/book")
 public class BookController {
-    @Autowired
-    private BookRepository bookRepository;
 
-    @GetMapping
-    public String listBook(Model model) {
-        List<Book> books = (List<Book>) bookRepository.findAll();
-        model.addAttribute("books", books);
-        return "index";
-    }
+    
 }
