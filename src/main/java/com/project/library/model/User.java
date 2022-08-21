@@ -1,7 +1,13 @@
 package com.project.library.model;
 
-public class User {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "Users")
+public class User {
+    @Id
     private Long id;
     private String name;
     private String lastname;
