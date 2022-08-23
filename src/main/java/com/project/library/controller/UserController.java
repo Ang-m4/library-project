@@ -3,10 +3,7 @@ package com.project.library.controller;
 import com.project.library.Db.UserRepository;
 import com.project.library.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +22,21 @@ public class UserController {
     @GetMapping("/{id}")
     public User get(@PathVariable long id) {
         return userRepository.findById(id).get();
+    }
+
+    @PostMapping("/add")
+    public User addUser(@RequestBody User user) {
+        return userRepository.save(user);
+    }
+
+    @PutMapping("/{id}/update")
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        user.setId(id);
+        return userRepository.save(user);
+    }
+    @DeleteMapping("/{id}/delete")
+    public void deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
+
     }
 }
