@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "subscriptions")
 public class Subscription{
@@ -18,7 +20,8 @@ public class Subscription{
     @GeneratedValue
     @Column(name = "subscription_id")
     private Long id;
-
+    
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "reader_id")
     private Reader reader;
