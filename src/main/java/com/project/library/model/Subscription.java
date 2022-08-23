@@ -39,7 +39,7 @@ public class Subscription{
     public Subscription() {
     }   
 
-    public Subscription(long id, Reader reader, Book book, LocalDate requestDate, LocalDate givenDate, LocalDate returnDate, int fine) {
+    public Subscription(long id, Reader reader, Book book, LocalDate givenDate, LocalDate returnDate, int fine) {
         this.id = id;
         this.reader = reader;
         this.book = book;
