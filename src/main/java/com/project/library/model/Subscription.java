@@ -1,24 +1,51 @@
 package com.project.library.model;
-import java.time.LocalDate;
-import java.util.List;
 
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "subscriptions")
 public class Subscription{
 
+    @Id
+    @GeneratedValue
+    @Column(name = "subscription_id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "reader_id")
     private Reader reader;
-    private List<Book> books;
+
+    @ManyToOne
+    @JoinColumn(name = "book_isbn")
+    private Book book;
+
+    @Column(name = "subscription_given_date")
     private LocalDate givenDate;
+
+    @Column(name = "subscription_return_date")
     private LocalDate returnDate;
+
+    @Column(name = "subscription_fine")
+    private int fine;
 
     public Subscription() {
     }   
 
-    public Subscription(long id, Reader reader, List<Book> books, LocalDate requestDate, LocalDate givenDate, LocalDate returnDate) {
+    public Subscription(long id, Reader reader, Book book, LocalDate requestDate, LocalDate givenDate, LocalDate returnDate, int fine) {
         this.id = id;
         this.reader = reader;
-        this.books = books;
+        this.book = book;
         this.givenDate = givenDate;
         this.returnDate = returnDate;
+        this.fine = fine;
     }
 
     public long getId() {
@@ -36,14 +63,14 @@ public class Subscription{
     public void setReader(Reader reader) {
         this.reader = reader;
     }
-
-    public List<Book> getBooks() {
-        return books;
+    
+    public Book getBook() {
+        return book;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }   
+    public void setBook(Book book) {
+        this.book = book;
+    }
 
     public LocalDate getGivenDate() {
         return givenDate;
@@ -56,6 +83,14 @@ public class Subscription{
     }
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public int getFine() {
+        return fine;
+    }
+
+    public void setFine(int fine) {
+        this.fine = fine;
     }
      
     

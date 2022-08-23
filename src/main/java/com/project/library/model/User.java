@@ -1,16 +1,27 @@
 package com.project.library.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "Users")
 public class User {
+    
     @Id
+    @GeneratedValue
+    @Column(name = "user_id")
     private Long id;
+
+    @Column(name = "user_name")
     private String name;
+
+    @Column(name = "user_lastname")
     private String lastname;
+
+    @Column(name = "user_password")
     private String password;
 
     public User() {

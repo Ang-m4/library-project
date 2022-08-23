@@ -1,20 +1,47 @@
 package com.project.library.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "readers")
 public class Reader{
 
+    @Id
+    @GeneratedValue
+    @Column(name = "reader_id")
     private Long id;
+
+    @Column(name = "reader_name")
     private String name;
+
+    @Column(name = "reader_lastname")
     private String lastname;
+
+    @Column(name = "reader_password")
     private String password;
+
+    @Column(name = "reader_blocked")
     private boolean blocked;
+
+    @OneToMany(mappedBy = "reader")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "reader")
     private List<Subscription> subscriptions;
 
     public Reader() {
+        this.orders = new ArrayList<>();
+        this.subscriptions = new ArrayList<>();
+        
     }
 
     public Reader(long id, String name, String lastname, String password, boolean state, List<Order> orders, List<Subscription> subscriptions) {

@@ -1,23 +1,40 @@
 package com.project.library.model;
 
-import java.util.List;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "orders")
 public class Order {
 
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "reader_id")
     private Reader reader;
-    private List<Book> books;
+
+    @ManyToOne
+    @JoinColumn(name = "book_isbn")
+    private Book book;
+
+    @Column(name = "order_request_date")
     private LocalDate requestDate;
 
     public Order() {
     }
 
-    public Order(long id, Reader reader, List<Book> books, LocalDate requestDate) {
+    public Order(long id, Reader reader, Book book, LocalDate requestDate) {
         this.id = id;
         this.reader = reader;
-        this.books = books;
+        this.book = book;
         this.requestDate = requestDate;
     }
 
@@ -37,12 +54,12 @@ public class Order {
         this.reader = reader;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public LocalDate getRequestDate() {

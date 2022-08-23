@@ -1,21 +1,32 @@
 package com.project.library.model;
 
 import java.time.*;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Books")
+@Table(name = "books")
 public class Book {
     
     @Id
+    @Column(name = "book_isbn")
     private Long isbn;
+
+    @Column(name = "book_name")
     private String name;
+
+    @Column(name = "book_author")
     private String author;
+
+    @Column(name = "book_publish_date")
     private LocalDate publishDate;
+
+    @Column(name = "book_copies")
     private int copies;
+
+    @Column(name = "book_publish")
     private String publish;
 
     public Book() {
