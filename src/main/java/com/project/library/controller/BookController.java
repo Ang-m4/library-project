@@ -1,5 +1,6 @@
 package com.project.library.controller;
 import com.project.library.Db.BookRepository;
+import com.project.library.Db.OrderRepository;
 import com.project.library.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,9 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @GetMapping("/list")
     public List<Book> getList() {
@@ -45,8 +49,12 @@ public class BookController {
 
     @DeleteMapping("/{isbn}/delete")
     public void deleteBook(@PathVariable Long isbn) {
-        bookRepository.deleteById(isbn);
 
+        if(orderRepository.findAllByBookIsbn(isbn).size() > 0) {
+            throw new RuntimeException("Cannot delete book with orders");
+        }
+        
+        bookRepository.deleteById(isbn);
     }
 
 }
