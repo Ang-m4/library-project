@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.project.library.model.Book;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -63,7 +64,7 @@ public class ReaderController {
             @ApiResponse(responseCode = "404", description = "Reader not found",
                     content = @Content) })
     @GetMapping("/{id}")
-    public Reader get(@PathVariable Long id) {
+    public Reader get(@Parameter(description = "id of reader to be searched") @PathVariable Long id) {
 
         Reader reader = null;
         if (readerRepository.findById(id).isPresent()) {
@@ -103,7 +104,7 @@ public class ReaderController {
             @ApiResponse(responseCode = "404", description = "Reader not found",
                     content = @Content) })
     @PutMapping("/{id}/update")
-    public Reader updateReader(@PathVariable Long id, @RequestBody Reader reader) {
+    public Reader updateReader(@Parameter(description = "id of reader to be updated") @PathVariable Long id, @RequestBody Reader reader) {
 
         reader.setId(id);
         Reader updatedReader = readerRepository.save(reader);
@@ -122,7 +123,7 @@ public class ReaderController {
             @ApiResponse(responseCode = "404", description = "Reader not found",
                     content = @Content) })
     @DeleteMapping("/{id}/delete")
-    public void deleteReader(@PathVariable Long id) {
+    public void deleteReader(@Parameter(description = "id of reader to be deleted") @PathVariable Long id) {
 
         if (readerRepository.findById(id).isPresent()) {
             logger.info("Deleting reader with id {}", id);

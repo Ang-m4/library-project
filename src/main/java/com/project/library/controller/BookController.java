@@ -6,6 +6,7 @@ import com.project.library.Db.SubscriptionRepository;
 import com.project.library.model.Book;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -157,7 +158,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found",
                     content = @Content) })
     @GetMapping("/{isbn}")
-    public Book getBook(@PathVariable Long isbn) {
+    public Book getBook(@Parameter(description = "id of book to be searched") @PathVariable Long isbn) {
 
         Book book = null;
 
@@ -198,7 +199,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found",
                     content = @Content) })
     @PutMapping("/{isbn}/update")
-    public Book updateBook(@PathVariable Long isbn, @RequestBody Book book) {
+    public Book updateBook(@Parameter(description = "isbn of book to be updated") @PathVariable Long isbn, @RequestBody Book book) {
 
         book.setIsbn(isbn);
         Book updatedBook = bookRepository.save(book);
@@ -217,7 +218,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found",
                     content = @Content) })
     @DeleteMapping("/{isbn}/delete")
-    public void deleteBook(@PathVariable Long isbn) {
+    public void deleteBook(@Parameter(description = "isbn of book to be deleted") @PathVariable Long isbn) {
 
         if (bookRepository.findById(isbn).isPresent()) {
 

@@ -9,6 +9,7 @@ import com.project.library.model.Reader;
 import com.project.library.model.Subscription;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -68,7 +69,7 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "404", description = "Subscription not found",
                     content = @Content) })
     @GetMapping("/{id}")
-    public Subscription getSubscription(@PathVariable long id) {
+    public Subscription getSubscription(@Parameter(description = "id of subscription to be searched") @PathVariable long id) {
 
         Subscription subscription = null;
         if (subscriptionRepository.findById(id).isPresent()) {
@@ -90,7 +91,7 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "404", description = "Subscription not added",
                     content = @Content) })
     @PostMapping("/add")
-    public Subscription addSubscription(@RequestParam Long idOrder, @RequestParam Long duration) {
+    public Subscription addSubscription(@Parameter(description = "id of order to be added in the subscription") @RequestParam Long idOrder, @Parameter(description = "duration(in days) to be added in the subscription") @RequestParam Long duration) {
 
         Subscription newSubscription = null;
 
@@ -127,7 +128,7 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "404", description = "Subscription not found",
                     content = @Content) })
     @PutMapping("/{id}/update")
-    public Subscription updateSubscription(@PathVariable Long id, @RequestParam Long plus) {
+    public Subscription updateSubscription(@Parameter(description = "id of subscription to be updated") @PathVariable Long id, @Parameter(description = "days to be added in the duration´s subscription") @RequestParam Long plus) {
 
         Subscription subscription = null;
 
@@ -155,7 +156,7 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "404", description = "Subscription not found",
                     content = @Content) })
     @DeleteMapping("/{id}/delete")
-    public void deleteSubscription(@PathVariable Long id) {
+    public void deleteSubscription(@Parameter(description = "id of subscription to be deleted") @PathVariable Long id) {
 
         if (subscriptionRepository.findById(id).isPresent()) {
             Subscription subscription = subscriptionRepository.findById(id).get();

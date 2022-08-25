@@ -8,6 +8,7 @@ import com.project.library.model.Order;
 import com.project.library.model.Reader;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -67,7 +68,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Order not found",
                     content = @Content) })
     @GetMapping("/{id}")
-    public Order getOrder(@PathVariable long id) {
+    public Order getOrder(@Parameter(description = "id of order to be searched") @PathVariable long id) {
 
         Order order = null;
 
@@ -90,7 +91,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Order not added",
                     content = @Content) })
     @PostMapping("/add")
-    public Order addOrder(@RequestParam Long idUser, @RequestParam Long idBook) {
+    public Order addOrder(@Parameter(description = "id of user to be added in the order") @RequestParam Long idUser, @Parameter(description = "id of book to be added in the order") @RequestParam Long idBook) {
 
         Order savedOrder = null;
 
@@ -127,7 +128,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Order not found",
                     content = @Content) })
     @DeleteMapping("/{id}/delete")
-    public void deleteOrder(@PathVariable Long id) {
+    public void deleteOrder(@Parameter(description = "id of order to be deleted") @PathVariable Long id) {
 
         if (orderRepository.findById(id).isPresent()) {
 

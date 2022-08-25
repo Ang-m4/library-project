@@ -5,6 +5,7 @@ import com.project.library.model.Book;
 import com.project.library.model.User;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -55,7 +56,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content) })
     @GetMapping("/{id}")
-    public User get(@PathVariable long id) {
+    public User get(@Parameter(description = "id of user to be added") @PathVariable long id) {
 
         User user = null;
         
@@ -96,7 +97,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content) })
     @PutMapping("/{id}/update")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    public User updateUser(@Parameter(description = "id of user to be updated") @PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         User updatedUser = userRepository.save(user);
         logger.info("Updating user {} , and sending to the database", id);
@@ -114,7 +115,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content) })
     @DeleteMapping("/{id}/delete")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@Parameter(description = "id of user to be deleted")@PathVariable Long id) {
 
         if (userRepository.findById(id).isPresent()) {
             logger.info("Deleting user with id {}", id);
