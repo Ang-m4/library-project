@@ -5,27 +5,29 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "books")
 public class Book {
     
     @Id
+    @NotBlank
     @Column(name = "book_isbn")
     private Long isbn;
-
+    @NotBlank
     @Column(name = "book_name")
     private String name;
-
+    @NotBlank
     @Column(name = "book_author")
     private String author;
-
+    @NotBlank
     @Column(name = "book_publish_date")
     private LocalDate publishDate;
-
+    @NotBlank
     @Column(name = "book_copies")
     private int copies;
-
+    @NotBlank
     @Column(name = "book_publish")
     private String publish;
 

@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,15 +21,16 @@ public class Reader{
 
     @Id
     @GeneratedValue
+    @NotBlank
     @Column(name = "reader_id")
     private Long id;
-
+    @NotBlank
     @Column(name = "reader_name")
     private String name;
-
+    @NotBlank
     @Column(name = "reader_lastname")
     private String lastname;
-
+    @NotBlank
     @Column(name = "reader_password")
     private String password;
 
