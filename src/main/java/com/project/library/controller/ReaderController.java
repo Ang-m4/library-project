@@ -20,7 +20,7 @@ import com.project.library.model.Reader;
 @RestController
 @RequestMapping("/reader")
 public class ReaderController {
-    
+
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -42,11 +42,10 @@ public class ReaderController {
     public Reader get(@PathVariable Long id) {
 
         Reader reader = null;
-        if(readerRepository.findById(id).isPresent()){
+        if (readerRepository.findById(id).isPresent()) {
             logger.info("Getting reader with id {}", id);
             reader = readerRepository.findById(id).get();
-        }
-        else{
+        } else {
             logger.error("Reader with id {} not found", id);
         }
         return reader;
@@ -63,7 +62,7 @@ public class ReaderController {
 
     @PutMapping("/{id}/update")
     public Reader updateReader(@PathVariable Long id, @RequestBody Reader reader) {
-        
+
         reader.setId(id);
         Reader updatedReader = readerRepository.save(reader);
         logger.info("Updating reader {} , and sending to the database", updatedReader.getId());
@@ -74,11 +73,10 @@ public class ReaderController {
     @DeleteMapping("/{id}/delete")
     public void deleteReader(@PathVariable Long id) {
 
-        if(readerRepository.findById(id).isPresent()){
+        if (readerRepository.findById(id).isPresent()) {
             logger.info("Deleting reader with id {}", id);
             readerRepository.deleteById(id);
-        }
-        else{
+        } else {
             logger.error("Reader with id {} not found", id);
         }
     }

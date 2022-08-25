@@ -1,13 +1,18 @@
 package com.project.library.controller;
 
+import com.project.library.Db.BookRepository;
 import com.project.library.Db.OrderRepository;
+import com.project.library.Db.ReaderRepository;
+import com.project.library.model.Book;
 import com.project.library.model.Order;
+import com.project.library.model.Reader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -18,6 +23,12 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private ReaderRepository readerRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @GetMapping("/list")
     public List<Order> getList() {
@@ -47,32 +58,50 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public Order addOrder(@RequestBody Order order) {
+    public Order addOrder(@RequestParam Long idUser, @RequestParam Long idBook) {
 
-        Order newOrder = orderRepository.save(order);
-        logger.info("Saving order with id {} to the database", newOrder.getId());
+        Order savedOrder = null;
 
-        return orderRepository.save(order);
-    }
+        if (readerRepository.findById(idUser).isPresent() && bookRepository.findById(idBook).isPresent()) {
 
-    @PutMapping("/{id}/update")
-    public Order updateOrder(@PathVariable Long id, @RequestBody Order order) {
-        order.setId(id);
-        Order updatedOrder = orderRepository.save(order);
-        logger.info("Updating order {} , and sending to the database",updatedOrder.getId());
-        return orderRepository.save(order);
+            Book book = bookRepository.findById(idBook).get();
+            Reader reader = readerRepository.findById(idUser).get();
+
+            if (book.getCopies() > 0) {
+
+                savedOrder = orderRepository.save(new Order(-1, reader, book, LocalDate.now()));
+
+                book.setCopies(book.getCopies() - 1);
+                bookRepository.save(book);
+                logger.info("Adding order with idUser {} and idBook {}", idUser, idBook);
+
+            } else {
+
+                logger.error("Book with id {} has no copies", book.getIsbn());
+            }
+        } else {
+            logger.error("Reader or book not found");
+        }
+        return savedOrder;
     }
 
     @DeleteMapping("/{id}/delete")
     public void deleteOrder(@PathVariable Long id) {
 
         if (orderRepository.findById(id).isPresent()) {
+
+            Book book = orderRepository.findById(id).get().getBook();
+
             logger.info("Deleting order with id {}", id);
             orderRepository.deleteById(id);
+
+            book.setCopies(book.getCopies() + 1);
+            bookRepository.save(book);
+
         } else {
             logger.error("Order with id {} not found", id);
         }
-        
+
     }
 
 }

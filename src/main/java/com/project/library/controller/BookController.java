@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
 @RestController
 @RequestMapping("/book")
 public class BookController {
@@ -40,10 +39,61 @@ public class BookController {
 
         List<Book> list = (List<Book>) bookRepository.findAll();
 
-        if(list.size() == 0){
+        if (list.size() == 0) {
             logger.error("No books found in the database");
+        } else {
+            logger.info("Getting books from database");
         }
-        else{
+        return list;
+    }
+
+    @GetMapping("/list/author")
+    public List<Book> getListByAuthor() {
+
+        List<Book> list = (List<Book>) bookRepository.findOrderedByAuthor();
+
+        if (list.size() == 0) {
+            logger.error("No books found in the database");
+        } else {
+            logger.info("Getting books from database");
+        }
+        return list;
+    }
+
+    @GetMapping("/list/name")
+    public List<Book> getListByName() {
+
+        List<Book> list = (List<Book>) bookRepository.findOrderedByName();
+
+        if (list.size() == 0) {
+            logger.error("No books found in the database");
+        } else {
+            logger.info("Getting books from database");
+        }
+        return list;
+    }
+
+    @GetMapping("/list/publish")
+    public List<Book> getListByPublish() {
+
+        List<Book> list = (List<Book>) bookRepository.findOrderedByPublish();
+
+        if (list.size() == 0) {
+            logger.error("No books found in the database");
+        } else {
+            logger.info("Getting books from database");
+        }
+        return list;
+    }
+
+    @GetMapping("/list/date")
+    public List<Book> getListByDate() {
+
+        List<Book> list = (List<Book>) bookRepository.findOrderedByPublishDate();
+
+        if (list.size() == 0) {
+            logger.error("No books found in the database");
+        } else {
             logger.info("Getting books from database");
         }
         return list;
@@ -54,28 +104,27 @@ public class BookController {
 
         Book book = null;
 
-        if(bookRepository.findById(isbn).isPresent()){
+        if (bookRepository.findById(isbn).isPresent()) {
             logger.info("Getting book with isbn {}", isbn);
             book = bookRepository.findById(isbn).get();
-        }
-        else{
+        } else {
             logger.error("Book with isbn {} not found", isbn);
         }
-        return  book;
+        return book;
     }
-    
+
     @PostMapping("/add")
     public Book addBook(@RequestBody Book book) {
 
         Book newBook = bookRepository.save(book);
         logger.info("Saving book {} to the database", newBook.getIsbn());
-        
+
         return newBook;
     }
 
     @PutMapping("/{isbn}/update")
     public Book updateBook(@PathVariable Long isbn, @RequestBody Book book) {
-        
+
         book.setIsbn(isbn);
         Book updatedBook = bookRepository.save(book);
         logger.info("Updating book {} , and sending to the database", updatedBook.getIsbn());
@@ -86,19 +135,17 @@ public class BookController {
     @DeleteMapping("/{isbn}/delete")
     public void deleteBook(@PathVariable Long isbn) {
 
-        if(bookRepository.findById(isbn).isPresent()){
-            
-            if( orderRepository.findByBookIsbn(isbn).size() > 0 || 
-                subscriptionRepository.findByBookIsbn(isbn).size() > 0){
+        if (bookRepository.findById(isbn).isPresent()) {
 
-                    logger.error("Book with isbn {} is in use, cannot delete", isbn);
-            }
-            else{
+            if (orderRepository.findByBookIsbn(isbn).size() > 0 ||
+                    subscriptionRepository.findByBookIsbn(isbn).size() > 0) {
+
+                logger.error("Book with isbn {} is in use, cannot delete", isbn);
+            } else {
                 bookRepository.deleteById(isbn);
                 logger.info("Deleting book with isbn {}", isbn);
             }
-        }
-        else{
+        } else {
             logger.error("Book with isbn {} not found", isbn);
         }
 

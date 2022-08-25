@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "readers")
 public class Reader{
@@ -33,9 +35,11 @@ public class Reader{
     @Column(name = "reader_blocked")
     private boolean blocked;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL)
     private List<Order> orders;
-
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL)
     private List<Subscription> subscriptions;
 

@@ -35,7 +35,7 @@ public class UserController {
     public User get(@PathVariable long id) {
 
         User user = null;
-
+        
         if (userRepository.findById(id).isPresent()) {
             logger.info("Getting user with id {}", id);
             user = userRepository.findById(id).get();
