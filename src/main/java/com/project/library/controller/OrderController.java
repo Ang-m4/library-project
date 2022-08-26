@@ -2,10 +2,10 @@ package com.project.library.controller;
 
 import com.project.library.Db.BookRepository;
 import com.project.library.Db.OrderRepository;
-import com.project.library.Db.ReaderRepository;
+import com.project.library.Db.UserRepository;
 import com.project.library.model.Book;
 import com.project.library.model.Order;
-import com.project.library.model.Reader;
+import com.project.library.model.User;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +31,7 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @Autowired
-    private ReaderRepository readerRepository;
+    private UserRepository readerRepository;
 
     @Autowired
     private BookRepository bookRepository;
@@ -98,7 +98,7 @@ public class OrderController {
         if (readerRepository.findById(idUser).isPresent() && bookRepository.findById(idBook).isPresent()) {
 
             Book book = bookRepository.findById(idBook).get();
-            Reader reader = readerRepository.findById(idUser).get();
+            User reader = readerRepository.findById(idUser).get();
 
             if (book.getCopies() > 0) {
 

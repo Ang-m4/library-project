@@ -1,8 +1,9 @@
 package com.project.library.controller;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,64 +28,61 @@ public class UserControllerIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
-
+    
     @Autowired
     private TestRestTemplate rest;
 
     @BeforeEach
     public void init() {
-        
-        User user = new User(1l,"Bob","Doe","1234567");
-        User user1 = new User(2l,"Mary","Doe","1234567");
-        User user2 = new User(3l,"Cecille","Doe","1234567");
 
-        userRepository.saveAll(List.of(user,user1,user2));
+    	User reader = new User(1, "John reader", "Doe", "1234321", false, new ArrayList<>(), new ArrayList<>(),"Jhonie","ROLE_READER");
+        User reader2 = new User(2, "Jane reader", "Doe", "12321", false, new ArrayList<>(), new ArrayList<>(),"Jenny","ROLE_READER");
+
+        userRepository.save(reader);
+        userRepository.save(reader2);
     }
-
+    
     @AfterEach
     public void clean() {
-
-        userRepository.deleteAll();
+    	userRepository.deleteAll();
     }
 
     @Test
-    void testAddUser() {
-
-        User user = new User(4l,"Dani","Doe","1234567");
-        rest.postForEntity("http://localhost:" + port + "/user/add", user, User.class);
-        assertEquals(4, userRepository.count());
+    void testAddReader() {
+    
+        User reader = new User(3, "Dani reader", "Doe", "1234321", false, new ArrayList<>(), new ArrayList<>(),"Dani","ROLE_READER");
+    	rest.postForEntity("http://localhost:" + port + "/user/add", reader, User.class);
+    	assertEquals(3, userRepository.count());
 
     }
 
     @Test
-    void testDeleteUser() {
-
+    void testDeleteReader() {
         rest.delete("http://localhost:" + port + "/user/1/delete");
-        assertEquals(2, userRepository.count());
-
+    	assertEquals(1, userRepository.count());
     }
 
     @Test
     void testGet() {
+        User reader = rest.getForObject("http://localhost:" + port + "/user/1", User.class);
+        assertEquals(1, reader.getId());
 
-        User user = rest.getForObject("http://localhost:" + port + "/user/1", User.class);
-        assertEquals("Bob", user.getName());
-
+        User reader2 = rest.getForObject("http://localhost:" + port + "/user/2", User.class);
+        assertEquals(2, reader2.getId());
+        
     }
 
     @Test
     void testList() {
-
-        User[] users = rest.getForObject("http://localhost:" + port + "/user/list", User[].class);
-        assertEquals(3, users.length);
-
+        User[] readers = rest.getForObject("http://localhost:" + port + "/user/list", User[].class);
+        assertEquals(2, readers.length);
     }
 
     @Test
-    void testUpdateUser() {
-        User user = new User(1l,"Bob second","Doe","1234567");
-        rest.put("http://localhost:" + port + "/user/1/update", user);
-        assertEquals("Bob second", userRepository.findById(1l).get().getName());
-
+    void testUpdateReader() {
+        User reader = new User(1, "John not reader", "Doe", "1234321", false, new ArrayList<>(), new ArrayList<>(), "Jhonie", "ROLE_READER");
+        rest.put("http://localhost:" + port + "/user/1/update", reader);
+        assertEquals("John not reader", userRepository.findById(1l).get().getName());
     }
+    
 }

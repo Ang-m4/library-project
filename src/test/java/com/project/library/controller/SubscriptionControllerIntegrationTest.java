@@ -17,11 +17,11 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.project.library.Db.BookRepository;
 import com.project.library.Db.OrderRepository;
-import com.project.library.Db.ReaderRepository;
+import com.project.library.Db.UserRepository;
 import com.project.library.Db.SubscriptionRepository;
 import com.project.library.model.Book;
 import com.project.library.model.Order;
-import com.project.library.model.Reader;
+import com.project.library.model.User;
 import com.project.library.model.Subscription;
 
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -38,7 +38,7 @@ public class SubscriptionControllerIntegrationTest {
     private BookRepository bookRepository;
 
     @Autowired
-    private ReaderRepository readerRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private TestRestTemplate rest;
@@ -59,11 +59,11 @@ public class SubscriptionControllerIntegrationTest {
         bookRepository.save(book3);
         bookRepository.save(book4);
 
-        Reader reader = new Reader(1, "John reader", "Doe", "1234321", false, new ArrayList<>(), new ArrayList<>());
-        Reader reader2 = new Reader(2, "Jane reader", "Doe", "12321", false, new ArrayList<>(), new ArrayList<>());
+        User reader = new User(1, "John reader", "Doe", "1234321", false, new ArrayList<>(), new ArrayList<>(),"Jhonie","ROLE_READER");
+        User reader2 = new User(2, "Jane reader", "Doe", "12321", false, new ArrayList<>(), new ArrayList<>(),"Jenny","ROLE_READER");
 
-        readerRepository.save(reader);
-        readerRepository.save(reader2);
+        userRepository.save(reader);
+        userRepository.save(reader2);
 
     }
     
@@ -83,7 +83,7 @@ public class SubscriptionControllerIntegrationTest {
         assertEquals(0, orderRepository.count());
         assertEquals(1, subscriptionRepository.count());
         assertEquals(order.getBook().getName(), subscription.getBook().getName());
-        assertEquals(order.getReader().getName(), subscription.getReader().getName());
+        assertEquals(order.getUser().getName(), subscription.getUser().getName());
         assertEquals(subscription.getGivenDate().plusDays(duration), subscription.getReturnDate());
 
     }
@@ -143,7 +143,7 @@ public class SubscriptionControllerIntegrationTest {
         assertEquals(1, subscriptionRepository.count());
 
         assertEquals("Harry Potter", subscription.getBook().getName());
-        assertEquals("John reader", subscription.getReader().getName());
+        assertEquals("John reader", subscription.getUser().getName());
 
     }
 

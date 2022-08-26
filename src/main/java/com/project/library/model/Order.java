@@ -19,8 +19,8 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "reader_id")
-    private Reader reader;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "book_isbn")
@@ -32,9 +32,9 @@ public class Order {
     public Order() {
     }
 
-    public Order(long id, Reader reader, Book book, LocalDate requestDate) {
+    public Order(long id, User user, Book book, LocalDate requestDate) {
         this.id = id;
-        this.reader = reader;
+        this.user = user;
         this.book = book;
         this.requestDate = requestDate;
     }
@@ -47,12 +47,12 @@ public class Order {
         this.id = id;
     }
 
-    public Reader getReader() {
-        return reader;
+    public User getUser() {
+        return user;
     }
 
-    public void setReader(Reader reader) {
-        this.reader = reader;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Book getBook() {

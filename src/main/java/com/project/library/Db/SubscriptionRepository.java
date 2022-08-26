@@ -14,7 +14,7 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
     @Query("SELECT s FROM Subscription s WHERE s.book.isbn = ?1")
     List<Subscription> findByBookIsbn(Long isbn);
 
-    @Query("SELECT s FROM Subscription s WHERE s.reader.id = ?1")
+    @Query("SELECT s FROM Subscription s WHERE s.user.id = ?1")
     List<Subscription> findAByReaderId(Long id);
 
 }

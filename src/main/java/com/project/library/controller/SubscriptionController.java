@@ -5,7 +5,7 @@ import com.project.library.Db.OrderRepository;
 import com.project.library.Db.SubscriptionRepository;
 import com.project.library.model.Book;
 import com.project.library.model.Order;
-import com.project.library.model.Reader;
+import com.project.library.model.User;
 import com.project.library.model.Subscription;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -99,7 +99,7 @@ public class SubscriptionController {
 
             Order order = orderRepository.findById(idOrder).get();
 
-            Reader reader = order.getReader();
+            User reader = order.getUser();
             Book book = order.getBook();
             LocalDate givenDate = LocalDate.now();
             LocalDate returnDate = givenDate.plusDays(duration);

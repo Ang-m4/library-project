@@ -14,6 +14,6 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.book.isbn = ?1")
     List<Order> findByBookIsbn(Long isbn);
 
-    @Query("SELECT o FROM Order o WHERE o.reader.id = ?1")
+    @Query("SELECT o FROM Order o WHERE o.user.id = ?1")
     List<Order> findByUserId(Long id);
 }

@@ -19,10 +19,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.project.library.Db.BookRepository;
 import com.project.library.Db.OrderRepository;
-import com.project.library.Db.ReaderRepository;
+import com.project.library.Db.UserRepository;
 import com.project.library.model.Book;
 import com.project.library.model.Order;
-import com.project.library.model.Reader;
+import com.project.library.model.User;
 
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -38,7 +38,7 @@ public class OrderControllerIntegrationTest {
     private BookRepository bookRepository;
 
     @Autowired
-    private ReaderRepository readerRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private TestRestTemplate rest;
@@ -56,11 +56,11 @@ public class OrderControllerIntegrationTest {
         bookRepository.save(book3);
         bookRepository.save(book4);
 
-        Reader reader = new Reader(1, "John reader", "Doe", "1234321", false, new ArrayList<>(), new ArrayList<>());
-        Reader reader2 = new Reader(2, "Jane reader", "Doe", "12321", false, new ArrayList<>(), new ArrayList<>());
+        User reader = new User(1, "John reader", "Doe", "1234321", false, new ArrayList<>(), new ArrayList<>(),"Jhonie","ROLE_READER");
+        User reader2 = new User(2, "Jane reader", "Doe", "12321", false, new ArrayList<>(), new ArrayList<>(),"Jenny","ROLE_READER");
 
-        readerRepository.save(reader);
-        readerRepository.save(reader2);
+        userRepository.save(reader);
+        userRepository.save(reader2);
     }
 
     @AfterEach
@@ -68,7 +68,7 @@ public class OrderControllerIntegrationTest {
 
         orderRepository.deleteAll();
         bookRepository.deleteAll();
-        readerRepository.deleteAll();
+        userRepository.deleteAll();
 
     }
 
@@ -79,7 +79,7 @@ public class OrderControllerIntegrationTest {
         assertEquals(1, orderRepository.count());
         assertEquals("Harry Potter", order.getBook().getName());
         assertEquals(2, order.getBook().getCopies());
-        assertEquals("John reader", order.getReader().getName());
+        assertEquals("John reader", order.getUser().getName());
 
     }
 
