@@ -40,7 +40,7 @@ public class OrderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Orders listed",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Order.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Orders not found",
@@ -62,7 +62,7 @@ public class OrderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order found",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Order.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Order not found",
@@ -85,7 +85,7 @@ public class OrderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order added",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Order.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Order not added",
@@ -122,7 +122,7 @@ public class OrderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order deleted",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Order.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Order not found",

@@ -29,7 +29,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Users listed",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Users not found",
@@ -50,7 +50,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User found",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found",
@@ -73,7 +73,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User added",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "User not added",
@@ -87,11 +87,11 @@ public class UserController {
         return newUser;
     }
 
-    @Operation(summary = "Update a user by its")
+    @Operation(summary = "Update a user by its id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User updated",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found",
@@ -109,7 +109,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User deleted",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = User.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found",

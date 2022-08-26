@@ -37,7 +37,7 @@ public class ReaderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Readers listed",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Reader.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Readers not found",
@@ -58,7 +58,7 @@ public class ReaderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reader found",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Reader.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Reader not found",
@@ -80,7 +80,7 @@ public class ReaderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reader added",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Reader.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Reader not added",
@@ -98,7 +98,7 @@ public class ReaderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reader updated",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Reader.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Reader not found",
@@ -117,7 +117,7 @@ public class ReaderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reader deleted",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Reader.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Reader not found",

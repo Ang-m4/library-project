@@ -41,7 +41,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscriptions listed",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Subscription.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Subscriptions not found",
@@ -63,7 +63,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription found",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Subscription.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Subscription not found",
@@ -85,7 +85,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription added",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Subscription.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Subscription not added",
@@ -122,7 +122,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription updated",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Subscription.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Subscription not found",
@@ -150,7 +150,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription deleted",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Book.class)) }),
+                            schema = @Schema(implementation = Subscription.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Subscription not found",
