@@ -2,6 +2,12 @@ package com.project.library.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +32,15 @@ public class ReaderController {
     @Autowired
     private ReaderRepository readerRepository;
 
+    @Operation(summary = "Get the list of readers")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Readers listed",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Reader.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Readers not found",
+                    content = @Content) })
     @GetMapping("/list")
     public List<Reader> list() {
         List<Reader> readers = (List<Reader>) readerRepository.findAll();
@@ -38,8 +53,17 @@ public class ReaderController {
         return readers;
     }
 
+    @Operation(summary = "Get a reader by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reader found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Reader.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Reader not found",
+                    content = @Content) })
     @GetMapping("/{id}")
-    public Reader get(@PathVariable Long id) {
+    public Reader get(@Parameter(description = "id of reader to be searched") @PathVariable Long id) {
 
         Reader reader = null;
         if (readerRepository.findById(id).isPresent()) {
@@ -51,6 +75,15 @@ public class ReaderController {
         return reader;
     }
 
+    @Operation(summary = "Add a new reader")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reader added",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Reader.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Reader not added",
+                    content = @Content) })
     @PostMapping("/add")
     public Reader addReader(@RequestBody Reader reader) {
 
@@ -60,8 +93,17 @@ public class ReaderController {
         return newReader;
     }
 
+    @Operation(summary = "Update a reader by its")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reader updated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Reader.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Reader not found",
+                    content = @Content) })
     @PutMapping("/{id}/update")
-    public Reader updateReader(@PathVariable Long id, @RequestBody Reader reader) {
+    public Reader updateReader(@Parameter(description = "id of reader to be updated") @PathVariable Long id, @RequestBody Reader reader) {
 
         reader.setId(id);
         Reader updatedReader = readerRepository.save(reader);
@@ -70,8 +112,17 @@ public class ReaderController {
         return updatedReader;
     }
 
+    @Operation(summary = "Delete a reader by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reader deleted",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Reader.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Reader not found",
+                    content = @Content) })
     @DeleteMapping("/{id}/delete")
-    public void deleteReader(@PathVariable Long id) {
+    public void deleteReader(@Parameter(description = "id of reader to be deleted") @PathVariable Long id) {
 
         if (readerRepository.findById(id).isPresent()) {
             logger.info("Deleting reader with id {}", id);

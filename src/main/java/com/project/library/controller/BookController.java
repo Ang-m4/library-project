@@ -5,6 +5,12 @@ import com.project.library.Db.OrderRepository;
 import com.project.library.Db.SubscriptionRepository;
 import com.project.library.model.Book;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +40,15 @@ public class BookController {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
+    @Operation(summary = "Get the catalog of books")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List all the books",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Catalog not found",
+                    content = @Content) })
     @GetMapping("/list")
     public List<Book> getList() {
 
@@ -47,6 +62,15 @@ public class BookController {
         return list;
     }
 
+    @Operation(summary = "Get the catalog of books order by author(A-Z)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List all the books order by author(A-Z)",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Catalog not found",
+                    content = @Content) })
     @GetMapping("/list/author")
     public List<Book> getListByAuthor() {
 
@@ -59,7 +83,16 @@ public class BookController {
         }
         return list;
     }
-
+    
+    @Operation(summary = "Get the catalog of books order by name(A-Z)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List all the books order by name(A-Z)",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Catalog not found",
+                    content = @Content) })
     @GetMapping("/list/name")
     public List<Book> getListByName() {
 
@@ -73,6 +106,15 @@ public class BookController {
         return list;
     }
 
+    @Operation(summary = "Get the catalog of books order by publish(A-Z)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List all the books order by publish(A-Z)",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Catalog not found",
+                    content = @Content) })
     @GetMapping("/list/publish")
     public List<Book> getListByPublish() {
 
@@ -86,6 +128,15 @@ public class BookController {
         return list;
     }
 
+    @Operation(summary = "Get the catalog of books order by publication date")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List all the books order by publication date",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Catalog not found",
+                    content = @Content) })
     @GetMapping("/list/date")
     public List<Book> getListByDate() {
 
@@ -99,8 +150,17 @@ public class BookController {
         return list;
     }
 
+    @Operation(summary = "Get the book by its isbn")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the book",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Book not found",
+                    content = @Content) })
     @GetMapping("/{isbn}")
-    public Book getBook(@PathVariable Long isbn) {
+    public Book getBook(@Parameter(description = "id of book to be searched") @PathVariable Long isbn) {
 
         Book book = null;
 
@@ -113,6 +173,15 @@ public class BookController {
         return book;
     }
 
+    @Operation(summary = "Add a book to the catalog")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Book added",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Book not added",
+                    content = @Content) })
     @PostMapping("/add")
     public Book addBook(@RequestBody Book book) {
 
@@ -122,8 +191,17 @@ public class BookController {
         return newBook;
     }
 
+    @Operation(summary = "Update a book in the catalog by its isbn")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Book updated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Book not found",
+                    content = @Content) })
     @PutMapping("/{isbn}/update")
-    public Book updateBook(@PathVariable Long isbn, @RequestBody Book book) {
+    public Book updateBook(@Parameter(description = "isbn of book to be updated") @PathVariable Long isbn, @RequestBody Book book) {
 
         book.setIsbn(isbn);
         Book updatedBook = bookRepository.save(book);
@@ -132,8 +210,17 @@ public class BookController {
         return updatedBook;
     }
 
+    @Operation(summary = "Delete a book in the catalog by its isbn")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Book deleted",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Book.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Book not found",
+                    content = @Content) })
     @DeleteMapping("/{isbn}/delete")
-    public void deleteBook(@PathVariable Long isbn) {
+    public void deleteBook(@Parameter(description = "isbn of book to be deleted") @PathVariable Long isbn) {
 
         if (bookRepository.findById(isbn).isPresent()) {
 

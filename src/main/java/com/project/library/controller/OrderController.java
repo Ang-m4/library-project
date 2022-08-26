@@ -7,6 +7,12 @@ import com.project.library.model.Book;
 import com.project.library.model.Order;
 import com.project.library.model.Reader;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +36,15 @@ public class OrderController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Operation(summary = "Get the list of orders")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Orders listed",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Order.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Orders not found",
+                    content = @Content) })
     @GetMapping("/list")
     public List<Order> getList() {
 
@@ -43,8 +58,17 @@ public class OrderController {
         return list;
     }
 
+    @Operation(summary = "Get an order by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Order.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Order not found",
+                    content = @Content) })
     @GetMapping("/{id}")
-    public Order getOrder(@PathVariable long id) {
+    public Order getOrder(@Parameter(description = "id of order to be searched") @PathVariable long id) {
 
         Order order = null;
 
@@ -57,8 +81,17 @@ public class OrderController {
         return order;
     }
 
+    @Operation(summary = "Add a new order")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order added",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Order.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Order not added",
+                    content = @Content) })
     @PostMapping("/add")
-    public Order addOrder(@RequestParam Long idUser, @RequestParam Long idBook) {
+    public Order addOrder(@Parameter(description = "id of user to be added in the order") @RequestParam Long idUser, @Parameter(description = "id of book to be added in the order") @RequestParam Long idBook) {
 
         Order savedOrder = null;
 
@@ -85,8 +118,17 @@ public class OrderController {
         return savedOrder;
     }
 
+    @Operation(summary = "Delete an order by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order deleted",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Order.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Order not found",
+                    content = @Content) })
     @DeleteMapping("/{id}/delete")
-    public void deleteOrder(@PathVariable Long id) {
+    public void deleteOrder(@Parameter(description = "id of order to be deleted") @PathVariable Long id) {
 
         if (orderRepository.findById(id).isPresent()) {
 

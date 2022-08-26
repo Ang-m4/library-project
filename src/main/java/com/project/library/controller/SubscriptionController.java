@@ -8,6 +8,12 @@ import com.project.library.model.Order;
 import com.project.library.model.Reader;
 import com.project.library.model.Subscription;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +37,15 @@ public class SubscriptionController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Operation(summary = "Get the list of subscriptions")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subscriptions listed",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Subscription.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Subscriptions not found",
+                    content = @Content) })
     @GetMapping("/list")
     public List<Subscription> getList() {
 
@@ -44,8 +59,17 @@ public class SubscriptionController {
         return list;
     }
 
+    @Operation(summary = "Get a subscription by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subscription found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Subscription.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Subscription not found",
+                    content = @Content) })
     @GetMapping("/{id}")
-    public Subscription getSubscription(@PathVariable long id) {
+    public Subscription getSubscription(@Parameter(description = "id of subscription to be searched") @PathVariable long id) {
 
         Subscription subscription = null;
         if (subscriptionRepository.findById(id).isPresent()) {
@@ -57,8 +81,17 @@ public class SubscriptionController {
         return subscription;
     }
 
+    @Operation(summary = "Add a new subscription")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subscription added",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Subscription.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Subscription not added",
+                    content = @Content) })
     @PostMapping("/add")
-    public Subscription addSubscription(@RequestParam Long idOrder, @RequestParam Long duration) {
+    public Subscription addSubscription(@Parameter(description = "id of order to be added in the subscription") @RequestParam Long idOrder, @Parameter(description = "duration(in days) to be added in the subscription") @RequestParam Long duration) {
 
         Subscription newSubscription = null;
 
@@ -85,8 +118,17 @@ public class SubscriptionController {
         return newSubscription;
     }
 
+    @Operation(summary = "Update a subscription by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subscription updated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Subscription.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Subscription not found",
+                    content = @Content) })
     @PutMapping("/{id}/update")
-    public Subscription updateSubscription(@PathVariable Long id, @RequestParam Long plus) {
+    public Subscription updateSubscription(@Parameter(description = "id of subscription to be updated") @PathVariable Long id, @Parameter(description = "days to be added in the duration´s subscription") @RequestParam Long plus) {
 
         Subscription subscription = null;
 
@@ -104,8 +146,17 @@ public class SubscriptionController {
         return subscription;
     }
 
+    @Operation(summary = "Delete a subscription by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subscription deleted",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Subscription.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Subscription not found",
+                    content = @Content) })
     @DeleteMapping("/{id}/delete")
-    public void deleteSubscription(@PathVariable Long id) {
+    public void deleteSubscription(@Parameter(description = "id of subscription to be deleted") @PathVariable Long id) {
 
         if (subscriptionRepository.findById(id).isPresent()) {
             Subscription subscription = subscriptionRepository.findById(id).get();
