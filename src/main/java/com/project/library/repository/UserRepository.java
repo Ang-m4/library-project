@@ -1,4 +1,4 @@
-package com.project.library.Db;
+package com.project.library.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

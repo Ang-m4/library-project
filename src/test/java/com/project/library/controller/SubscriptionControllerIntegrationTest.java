@@ -15,13 +15,13 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
-import com.project.library.Db.BookRepository;
-import com.project.library.Db.OrderRepository;
-import com.project.library.Db.UserRepository;
-import com.project.library.Db.SubscriptionRepository;
 import com.project.library.model.Book;
 import com.project.library.model.Order;
 import com.project.library.model.User;
+import com.project.library.repository.BookRepository;
+import com.project.library.repository.OrderRepository;
+import com.project.library.repository.SubscriptionRepository;
+import com.project.library.repository.UserRepository;
 import com.project.library.model.Subscription;
 
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)

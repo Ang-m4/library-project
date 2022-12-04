@@ -1,11 +1,11 @@
 package com.project.library.controller;
 
-import com.project.library.Db.BookRepository;
-import com.project.library.Db.OrderRepository;
-import com.project.library.Db.SubscriptionRepository;
 import com.project.library.model.Book;
 import com.project.library.model.Order;
 import com.project.library.model.User;
+import com.project.library.repository.BookRepository;
+import com.project.library.repository.OrderRepository;
+import com.project.library.repository.SubscriptionRepository;
 import com.project.library.model.Subscription;
 
 import io.swagger.v3.oas.annotations.Operation;
