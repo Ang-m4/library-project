@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
 
-    @Query("SELECT s FROM Subscription s WHERE s.book.isbn = ?1")
-    List<Subscription> findByBookIsbn(Long isbn);
+    @Query(value = "SELECT * FROM subscriptions s WHERE s.book_isbn = ?1", nativeQuery = true)
+    List<Subscription> findByBookIsbn(String isbn);
 
-    @Query("SELECT s FROM Subscription s WHERE s.user.id = ?1")
+    @Query(value = "SELECT * FROM subscriptions s WHERE s.user_id = ?1",nativeQuery = true)
     List<Subscription> findAByReaderId(Long id);
 
 }

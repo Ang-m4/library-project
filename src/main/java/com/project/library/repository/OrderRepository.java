@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends CrudRepository<Order, Long> {
 
-    @Query("SELECT o FROM Order o WHERE o.book.isbn = ?1")
-    List<Order> findByBookIsbn(Long isbn);
+    @Query(value = "SELECT * FROM orders o WHERE o.book_isbn = ?1", nativeQuery = true)
+    List<Order> findByBookIsbn(String isbn);
 
-    @Query("SELECT o FROM Order o WHERE o.user.id = ?1")
+    @Query(value =  "SELECT * FROM orders o WHERE o.user_id = ?1", nativeQuery = true)
     List<Order> findByUserId(Long id);
 }
