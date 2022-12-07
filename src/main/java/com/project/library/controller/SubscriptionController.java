@@ -106,7 +106,7 @@ public class SubscriptionController {
 
             orderRepository.deleteById(order.getId());
 
-            newSubscription = subscriptionRepository.save(new Subscription(-1, reader, book, givenDate, returnDate, 0));
+            newSubscription = subscriptionRepository.save(new Subscription(-1l, reader, book, givenDate, returnDate, 0));
 
             logger.info("Adding subscription with id {}", newSubscription.getId());
         } else {

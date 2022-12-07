@@ -36,6 +36,7 @@ public class BookService {
         Optional<Book> book = bookRepository.findByISBN(isbn);
         if (!book.isPresent()) {
             // TODO throw exception
+            return null;
         }
         return book.get();
     }
@@ -43,11 +44,10 @@ public class BookService {
     public Book saveBook(Book book) {
         if (bookRepository.findByISBN(book.getIsbn()).isPresent()) {
             // TODO throw exception
-        }else{
-            Book savedBook = bookRepository.save(book);
-            return savedBook;
+            return null;
         }
-        return null;
+        Book savedBook = bookRepository.save(book);
+        return savedBook;
     }
 
     public void deleteBook(String isbn) {
@@ -67,20 +67,18 @@ public class BookService {
         Optional<Book> bookToUpdate = bookRepository.findByISBN(book.getIsbn());
         if (!bookToUpdate.isPresent()) {
             // TODO throw exception
-        }else{
-            Book updatedBook = Book.builder().
-                id(bookToUpdate.get().getId()).
-                isbn(book.getIsbn()).
-                title(book.getTitle()).
-                author(book.getAuthor()).
-                publishDate(book.getPublishDate()).
-                copies(book.getCopies()).
-                build();
-            
-            return bookRepository.save(updatedBook);
+            return null;
         }
-        
-        return null;
+        Book updatedBook = Book.builder().
+            id(bookToUpdate.get().getId()).
+            isbn(book.getIsbn()).
+            title(book.getTitle()).
+            author(book.getAuthor()).
+            publishDate(book.getPublishDate()).
+            copies(book.getCopies()).
+            publish(book.getPublish()).
+            build();
+        return bookRepository.save(updatedBook);
     }
 
 }

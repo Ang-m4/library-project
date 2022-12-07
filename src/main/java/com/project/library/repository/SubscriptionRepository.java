@@ -15,6 +15,6 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
     List<Subscription> findByBookIsbn(String isbn);
 
     @Query(value = "SELECT * FROM subscriptions s WHERE s.user_id = ?1",nativeQuery = true)
-    List<Subscription> findAByReaderId(Long id);
+    List<Subscription> findAByUserId(Long id);
 
 }

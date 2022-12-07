@@ -7,10 +7,25 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "orders")
 public class Order {
 
@@ -19,56 +34,17 @@ public class Order {
     private Long id;
 
     @ManyToOne
+    @NotNull(message = "User is mandatory")
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @NotNull(message = "Book is mandatory")
     @JoinColumn(name = "book_isbn")
     private Book book;
 
     @Column(name = "order_request_date")
+    @NotBlank(message = "Request date is mandatory")
     private LocalDate requestDate;
-
-    public Order() {
-    }
-
-    public Order(long id, User user, Book book, LocalDate requestDate) {
-        this.id = id;
-        this.user = user;
-        this.book = book;
-        this.requestDate = requestDate;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public LocalDate getRequestDate() {
-        return requestDate;
-    }
-
-    public void setRequestDate(LocalDate requestDate) {
-        this.requestDate = requestDate;
-    }
 
 }

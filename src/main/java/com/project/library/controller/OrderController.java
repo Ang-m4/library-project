@@ -102,7 +102,7 @@ public class OrderController {
 
             if (book.getCopies() > 0) {
 
-                savedOrder = orderRepository.save(new Order(-1, reader, book, LocalDate.now()));
+                savedOrder = orderRepository.save(new Order(-1l, reader, book, LocalDate.now()));
 
                 book.setCopies(book.getCopies() - 1);
                 bookRepository.save(book);
