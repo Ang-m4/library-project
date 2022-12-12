@@ -40,7 +40,7 @@ public class Subscription{
 
     @ManyToOne
     @NotNull(message = "Book is mandatory")
-    @JoinColumn(name = "book_isbn")
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @Column(name = "subscription_given_date")

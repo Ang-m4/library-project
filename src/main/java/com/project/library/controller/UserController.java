@@ -1,3 +1,8 @@
+/*
+    @author Andres Malagon
+    @GitHub Ang-m4
+*/
+
 package com.project.library.controller;
 
 import java.util.List;
@@ -87,7 +92,7 @@ public class UserController {
 
     @Operation(summary = "Delete a user by its id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "User deleted", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)) }),
+        @ApiResponse(responseCode = "200", description = "User deleted", content = @Content),
         @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
         @ApiResponse(responseCode = "404", description = "user not found", content = @Content) })
     @DeleteMapping("/{id}/delete")

@@ -54,7 +54,7 @@ public class BookController {
     public ResponseEntity<List<Book>>getList(
         @RequestParam(value = "sortField", required = false, defaultValue = "book_isbn") String sortField,
         @RequestParam(value = "direction", required = false, defaultValue = "ASC") String direction,
-        @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+        @RequestParam(value = "size", required = false, defaultValue = "all") int size,
         @RequestParam(value = "filter", required = false, defaultValue = "") String filter
         ) {
         List<Book> list = (List<Book>) bookService.getAllBooks(sortField,direction,size,filter);
@@ -86,7 +86,7 @@ public class BookController {
 
     @Operation(summary = "Update a book in the catalog")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Book updated", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class)) }),
+        @ApiResponse(responseCode = "200", description = "Book updated", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class)) }),
         @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Book not found", content = @Content) })
     @PutMapping("/update")
@@ -98,7 +98,7 @@ public class BookController {
 
     @Operation(summary = "Delete a book in the catalog by its isbn")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Book deleted", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = Book.class)) }),
+        @ApiResponse(responseCode = "200", description = "Book deleted", content = @Content),
         @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
         @ApiResponse(responseCode = "404", description = "Book not found", content = @Content) })
     @DeleteMapping("/{isbn}/delete")
