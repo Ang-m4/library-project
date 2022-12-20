@@ -54,7 +54,7 @@ public class BookController {
     public ResponseEntity<List<Book>>getList(
         @RequestParam(value = "sortField", required = false, defaultValue = "book_isbn") String sortField,
         @RequestParam(value = "direction", required = false, defaultValue = "ASC") String direction,
-        @RequestParam(value = "size", required = false, defaultValue = "all") int size,
+        @RequestParam(value = "size", required = false, defaultValue = "100") int size,
         @RequestParam(value = "filter", required = false, defaultValue = "") String filter
         ) {
         List<Book> list = (List<Book>) bookService.getAllBooks(sortField,direction,size,filter);

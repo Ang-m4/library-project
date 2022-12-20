@@ -27,7 +27,7 @@ public class SubscriptionService {
     private BookRepository bookRepository;
 
     public List<Subscription> getAllSubscriptions(String userNickName, String bookTitle, String sortOrder, Integer limit) {
-        List<Subscription> nonFilteredSubscriptions = (List<Subscription>) subscriptionRepository.findAll(sortOrder);
+        List<Subscription> nonFilteredSubscriptions = (List<Subscription>) subscriptionRepository.findAll();
         if (!userNickName.equals("")) {
             nonFilteredSubscriptions = nonFilteredSubscriptions.stream()
                     .filter(subscription -> subscription.getUser().getNickname().toLowerCase().contains(userNickName))
@@ -38,7 +38,7 @@ public class SubscriptionService {
                     .filter(subscription -> subscription.getBook().getTitle().toLowerCase().contains(bookTitle))
                     .collect(Collectors.toList());
         }
-        return nonFilteredSubscriptions.stream().limit(10).toList();
+        return nonFilteredSubscriptions.stream().limit(limit).toList();
     }
 
     public Subscription getSubscriptionById(Long id) {
@@ -63,8 +63,6 @@ public class SubscriptionService {
             .returnDate(LocalDate.now().plusDays(DaysTime))
             .fine(0)
             .build();
-        newSubscription.getBook().setCopies(newSubscription.getBook().getCopies() - 1);
-        bookRepository.save(newSubscription.getBook());
         orderRepository.delete(order.get());
         return subscriptionRepository.save(newSubscription);
     }

@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -44,7 +43,7 @@ public class Order {
     private Book book;
 
     @Column(name = "order_request_date")
-    @NotBlank(message = "Request date is mandatory")
+    @NotNull(message = "Request date is mandatory")
     private LocalDate requestDate;
 
 }

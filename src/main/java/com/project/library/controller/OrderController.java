@@ -1,11 +1,7 @@
 package com.project.library.controller;
 
-import com.project.library.model.Book;
 import com.project.library.model.Order;
-import com.project.library.model.User;
-import com.project.library.repository.BookRepository;
-import com.project.library.repository.OrderRepository;
-import com.project.library.repository.UserRepository;
+import com.project.library.service.OrderService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,134 +12,71 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/api/orders")
 public class OrderController {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private OrderRepository orderRepository;
+    OrderService orderService;
 
-    @Autowired
-    private UserRepository readerRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
-
-    @Operation(summary = "Get the list of orders")
+    @Operation(summary = "Get the orders list filteded by userNickname or book title with a sort order")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Orders listed",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Order.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Orders not found",
-                    content = @Content) })
+        @ApiResponse(responseCode = "200", description = "Orders listed", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Orders not found", content = @Content) })
     @GetMapping("/list")
-    public List<Order> getList() {
-
-        List<Order> list = (List<Order>) orderRepository.findAll();
-
-        if (list.size() == 0) {
-            logger.error("No orders found in the database");
-        } else {
-            logger.info("Getting orders from database");
-        }
-        return list;
+    public ResponseEntity<List<Order>> getList(
+        @RequestParam(value = "nickname", required = false, defaultValue = "") String nickname,
+        @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
+        @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit
+    ) {
+        List<Order> list = orderService.getAllOrders(nickname, filter, limit);
+        return ResponseEntity.ok(list);
     }
 
     @Operation(summary = "Get an order by its id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Order found",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Order.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Order not found",
-                    content = @Content) })
+        @ApiResponse(responseCode = "200", description = "Order found", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Order not found", content = @Content) })
     @GetMapping("/{id}")
-    public Order getOrder(@Parameter(description = "id of order to be searched") @PathVariable long id) {
-
-        Order order = null;
-
-        if (orderRepository.findById(id).isPresent()) {
-            logger.info("Getting order with id {}", id);
-            order = orderRepository.findById(id).get();
-        } else {
-            logger.error("Order with id {} not found", id);
-        }
-        return order;
+    public ResponseEntity<Order> getOrder(@Parameter(description = "id of order to be searched") @PathVariable long id) {
+        Order order = orderService.getOrderById(id);
+        return ResponseEntity.ok(order);
     }
 
     @Operation(summary = "Add a new order")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Order added",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Order.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Order not added",
-                    content = @Content) })
+        @ApiResponse(responseCode = "201", description = "Order added", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Order not added", content = @Content) })
     @PostMapping("/add")
-    public Order addOrder(@Parameter(description = "id of user to be added in the order") @RequestParam Long idUser, @Parameter(description = "id of book to be added in the order") @RequestParam Long idBook) {
-
-        Order savedOrder = null;
-
-        if (readerRepository.findById(idUser).isPresent() && bookRepository.findById(idBook).isPresent()) {
-
-            Book book = bookRepository.findById(idBook).get();
-            User reader = readerRepository.findById(idUser).get();
-
-            if (book.getCopies() > 0) {
-
-                savedOrder = orderRepository.save(new Order(-1l, reader, book, LocalDate.now()));
-
-                book.setCopies(book.getCopies() - 1);
-                bookRepository.save(book);
-                logger.info("Adding order with idUser {} and idBook {}", idUser, idBook);
-
-            } else {
-
-                logger.error("Book with id {} has no copies", book.getIsbn());
-            }
-        } else {
-            logger.error("Reader or book not found");
-        }
-        return savedOrder;
+    public ResponseEntity<Order> addOrder(
+        @Parameter(description = "id of user to be added in the order") @RequestParam Long idUser, 
+        @Parameter(description = "isbn of book to be added in the order") @RequestParam String isbn) {
+        Order savedOrder = orderService.addOrder(idUser, isbn);
+        logger.info("Saving order {} to the database",savedOrder.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
     @Operation(summary = "Delete an order by its id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Order deleted",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Order.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Order not found",
-                    content = @Content) })
+        @ApiResponse(responseCode = "200", description = "Order deleted", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Order not found", content = @Content) })
     @DeleteMapping("/{id}/delete")
-    public void deleteOrder(@Parameter(description = "id of order to be deleted") @PathVariable Long id) {
-
-        if (orderRepository.findById(id).isPresent()) {
-
-            Book book = orderRepository.findById(id).get().getBook();
-
-            logger.info("Deleting order with id {}", id);
-            orderRepository.deleteById(id);
-
-            book.setCopies(book.getCopies() + 1);
-            bookRepository.save(book);
-
-        } else {
-            logger.error("Order with id {} not found", id);
-        }
-
+    public ResponseEntity<String> deleteOrder(@Parameter(description = "id of order to be deleted") @PathVariable Long id) {
+        orderService.deleteOrder(id);
+        logger.info("Deleting order with id {}",id);
+        return ResponseEntity.ok("Order with id:" + id + " deleted");
     }
 
 }

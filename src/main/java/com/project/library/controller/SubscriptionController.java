@@ -99,7 +99,7 @@ public class SubscriptionController {
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteSubscription(@Parameter(description = "id of subscription to be deleted") @PathVariable Long id) {
         subscriptionService.deleteSubscription(id);
-        logger.info("Book with id {} deleted", id);
+        logger.info("Subscription with id {} deleted", id);
         return ResponseEntity.ok("Subscription with id " + id + " deleted");
     }
 }
