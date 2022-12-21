@@ -5,6 +5,7 @@
 
 package com.project.library.controller;
 
+import com.project.library.error.ErrorDTO;
 import com.project.library.model.Book;
 import com.project.library.service.BookService;
 
@@ -48,8 +49,7 @@ public class BookController {
     @Operation(summary = "Get the books catalog")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Returns a list of books ordered and filtered based on query parameters", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Catalog not found", content = @Content)})
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content)})
     @GetMapping("/list")
     public ResponseEntity<List<Book>>getList(
         @RequestParam(value = "sortField", required = false, defaultValue = "book_isbn") String sortField,
@@ -63,9 +63,9 @@ public class BookController {
 
     @Operation(summary = "Get a book by its ISBN")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Found the book",content = { @Content(mediaType = "application/json",schema = @Schema(implementation = Book.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Book not found", content = @Content) })
+        @ApiResponse(responseCode = "200", description = "Returns the book with the isbn given",content = { @Content(mediaType = "application/json",schema = @Schema(implementation = Book.class)) }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)) }),
+        @ApiResponse(responseCode = "404", description = "The book was not found", content = @Content) })
     @GetMapping("/{isbn}")
     public ResponseEntity<Book> getBook(@Parameter(description = "id of book to be searched") @PathVariable String isbn) {
         Book book = bookService.findBookByIsbn(isbn);
@@ -74,9 +74,9 @@ public class BookController {
 
     @Operation(summary = "Add a book to the catalog")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Book added", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = Book.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Book not added", content = @Content) })
+        @ApiResponse(responseCode = "201", description = "Book saved", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = Book.class)) }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))}),
+        @ApiResponse(responseCode = "404", description = "Book with given isbn already exist", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @PostMapping("/add")
     public ResponseEntity<Book> addBook(@RequestBody @Valid Book book) {
         Book newBook = bookService.saveBook(book);
@@ -87,8 +87,8 @@ public class BookController {
     @Operation(summary = "Update a book in the catalog")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Book updated", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Book not found", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Book with given isbn does not exist", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @PutMapping("/update")
     public ResponseEntity<Book> updateBook(@RequestBody @Valid Book book) {
         Book updatedBook = bookService.updateBook(book);
@@ -99,8 +99,8 @@ public class BookController {
     @Operation(summary = "Delete a book in the catalog by its isbn")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Book deleted", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Book not found", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Book is in use or does not exist", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @DeleteMapping("/{isbn}/delete")
     public ResponseEntity<String> deleteBook(@Parameter(description = "isbn of book to delete") @PathVariable String isbn) {
         bookService.deleteBook(isbn);

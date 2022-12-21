@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.library.error.ErrorDTO;
 import com.project.library.model.User;
 import com.project.library.service.UserService;
 
@@ -45,8 +46,7 @@ public class UserController {
     @Operation(summary = "Gets the list of users")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Returns a list of users filtered by a parameter", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = User.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request",content = @Content),
-        @ApiResponse(responseCode = "404", description = "Users not found",content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request",content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @GetMapping("/list")
     public ResponseEntity<List<User>> list(
         @RequestParam(value = "filter", required = false, defaultValue = "") String filter
@@ -58,8 +58,8 @@ public class UserController {
     @Operation(summary = "Get an user by its id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "User found", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "User not found", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @GetMapping("/{id}")
     public ResponseEntity<User> get(@Parameter(description = "Id of the user to be found") @PathVariable Long id) {
         User user = UserService.findUserById(id);
@@ -69,8 +69,9 @@ public class UserController {
     @Operation(summary = "Add a new User received as a parameter")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "User created", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = User.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "User not added", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "User with given id already exist", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "406", description = "User nickname unavaliable", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @PostMapping("/add")
     public ResponseEntity<User> addUser(@RequestBody @Valid User user) {
         User newUser = UserService.saveUser(user);
@@ -81,8 +82,8 @@ public class UserController {
     @Operation(summary = "Update an user received as a parameter")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "User updated", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "User not found", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "User not found",content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @PutMapping("/update")
     public ResponseEntity<User> updateUser(@RequestBody  @Valid User user) {
         User updatedUser = UserService.updateUser(user);
@@ -93,8 +94,9 @@ public class UserController {
     @Operation(summary = "Delete a user by its id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "User deleted", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "user not found", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "user not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "406", description = "user has a subscription asociated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteUser(@Parameter(description = "id of user to be deleted") @PathVariable Long id) {
         UserService.deleteUser(id);

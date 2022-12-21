@@ -6,8 +6,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.project.library.error.RequestException;
 import com.project.library.model.Order;
 import com.project.library.model.Subscription;
 import com.project.library.repository.BookRepository;
@@ -26,7 +28,7 @@ public class SubscriptionService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<Subscription> getAllSubscriptions(String userNickName, String bookTitle, String sortOrder, Integer limit) {
+    public List<Subscription> getAllSubscriptions(String userNickName, String bookTitle, Integer limit) {
         List<Subscription> nonFilteredSubscriptions = (List<Subscription>) subscriptionRepository.findAll();
         if (!userNickName.equals("")) {
             nonFilteredSubscriptions = nonFilteredSubscriptions.stream()
@@ -44,8 +46,7 @@ public class SubscriptionService {
     public Subscription getSubscriptionById(Long id) {
         Optional<Subscription> subscription = subscriptionRepository.findById(id);
         if (!subscription.isPresent()) {
-            //TODO throw exception if subscription not found
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND,"Subscription with id " + id + " not found");
         }
         return subscription.get();
     }
@@ -53,8 +54,7 @@ public class SubscriptionService {
     public Subscription addSubscription(Long idOrder, long DaysTime) {
         Optional<Order> order = orderRepository.findById(idOrder);
         if (order.isEmpty()) {
-            //TODO throw exception if order not found
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND,"Order with id " + idOrder + " not valid");
         }
         Subscription newSubscription = Subscription.builder()
             .user(order.get().getUser())
@@ -70,8 +70,7 @@ public class SubscriptionService {
     public Subscription updateSubscription(long id, long DaysPlus) {
         Optional<Subscription> subscription = subscriptionRepository.findById(id);
         if (subscription.isEmpty()) {
-            //TODO throw exception if subscription not found
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND,"Subscription with id " + id + " not found");
         }
         Subscription updatedSubscription = subscription.get();
         updatedSubscription.setReturnDate(updatedSubscription.getReturnDate().plusDays(DaysPlus));
@@ -81,8 +80,7 @@ public class SubscriptionService {
     public void deleteSubscription(long id) {
         Optional<Subscription> subscription = subscriptionRepository.findById(id);
         if (subscription.isEmpty()) {
-            //TODO throw exception if subscription not found
-            return;
+            throw new RequestException(HttpStatus.NOT_FOUND,"Subscription with id " + id + " not found");
         }
         subscription.get().getBook().setCopies(subscription.get().getBook().getCopies() + 1);
         bookRepository.save(subscription.get().getBook());

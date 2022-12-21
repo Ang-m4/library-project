@@ -1,8 +1,10 @@
 package com.project.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.project.library.error.RequestException;
 import com.project.library.model.User;
 import com.project.library.repository.OrderRepository;
 import com.project.library.repository.SubscriptionRepository;
@@ -36,20 +38,18 @@ public class UserService {
 
     public User findUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
-            // TODO throw exception
+        if (user.isEmpty()) {
+            throw new RequestException(HttpStatus.NOT_FOUND, "User with id " + id + " not found");
         }
         return user.get();
     }
 
     public User saveUser(User user) {
         if (userRepository.findById(user.getId()).isPresent()) {
-            // TODO throw exception if user already exists
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND, "User with id " + user.getId() + " already exist");
         }
         if (userRepository.findByNickname(user.getNickname()).isPresent()) {
-            // TODO throw exception if nickname is already in use
-            return null;
+            throw new RequestException(HttpStatus.NOT_ACCEPTABLE, "Nickname '" + user.getNickname() + "' already in use");
         }
         User savedUser = userRepository.save(user);
         return savedUser;
@@ -61,22 +61,20 @@ public class UserService {
                     && subscriptionRepository.findAByUserId(id).isEmpty()) {
                 userRepository.deleteById(id);
             } else {
-                // TODO throw exception if user is in use
+                throw new RequestException(HttpStatus.NOT_ACCEPTABLE, "User with id " + id + " has a subscription asociated");
             }
         } else {
-            // TODO throw exception if user does not exist
+            throw new RequestException(HttpStatus.NOT_FOUND, "User with id " + id + " not found");
         }
     }
 
     public User updateUser(User user) {
         if (!userRepository.findById(user.getId()).isPresent()) {
-            // TODO throw exception if user does not exist
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND, "User with id " + user.getId() + " not found");
         } 
         if(userRepository.findByNickname(user.getNickname()).isPresent()){
             if(!userRepository.findByNickname(user.getNickname()).get().getId().equals(user.getId())){
-                //TODO throw exception if nickname is already in use
-                return null;
+                throw new RequestException(HttpStatus.NOT_ACCEPTABLE, "Nickname '" + user.getNickname() + "' already in use");
             }
         }
         User updatedUser = userRepository.save(user);

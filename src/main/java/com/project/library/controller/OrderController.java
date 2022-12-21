@@ -1,5 +1,6 @@
 package com.project.library.controller;
 
+import com.project.library.error.ErrorDTO;
 import com.project.library.model.Order;
 import com.project.library.service.OrderService;
 
@@ -30,8 +31,7 @@ public class OrderController {
     @Operation(summary = "Get the orders list filteded by userNickname or book title with a sort order")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Orders listed", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Orders not found", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @GetMapping("/list")
     public ResponseEntity<List<Order>> getList(
         @RequestParam(value = "nickname", required = false, defaultValue = "") String nickname,
@@ -44,9 +44,9 @@ public class OrderController {
 
     @Operation(summary = "Get an order by its id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Order found", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Order not found", content = @Content) })
+        @ApiResponse(responseCode = "200", description = "Returns the order data given an order id", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Order with given id not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrder(@Parameter(description = "id of order to be searched") @PathVariable long id) {
         Order order = orderService.getOrderById(id);
@@ -55,9 +55,9 @@ public class OrderController {
 
     @Operation(summary = "Add a new order")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Order added", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Order not added", content = @Content) })
+        @ApiResponse(responseCode = "201", description = "Order saved", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
+        @ApiResponse(responseCode = "400", description = "Bad request, invalid patterns or lenght in parameters", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "406", description = "Book out of stock or blocked user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @PostMapping("/add")
     public ResponseEntity<Order> addOrder(
         @Parameter(description = "id of user to be added in the order") @RequestParam Long idUser, 
@@ -70,8 +70,8 @@ public class OrderController {
     @Operation(summary = "Delete an order by its id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Order deleted", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Order not found", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Order not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteOrder(@Parameter(description = "id of order to be deleted") @PathVariable Long id) {
         orderService.deleteOrder(id);

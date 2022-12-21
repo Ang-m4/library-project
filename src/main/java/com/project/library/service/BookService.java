@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.project.library.error.RequestException;
 import com.project.library.model.Book;
 import com.project.library.repository.BookRepository;
 import com.project.library.repository.OrderRepository;
@@ -35,16 +37,14 @@ public class BookService {
     public Book findBookByIsbn(String isbn) {
         Optional<Book> book = bookRepository.findByISBN(isbn);
         if (!book.isPresent()) {
-            // TODO throw exception
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND,"Book with isbn " + isbn + " was not found");
         }
         return book.get();
     }
 
     public Book saveBook(Book book) {
         if (bookRepository.findByISBN(book.getIsbn()).isPresent()) {
-            // TODO throw exception
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND, "Book with isbn "  + book.getIsbn() + " already exist");
         }
         Book savedBook = bookRepository.save(book);
         return savedBook;
@@ -56,18 +56,17 @@ public class BookService {
                     && subscriptionRepository.findByBookIsbn(isbn).isEmpty()) {
                 bookRepository.deleteByISBN(isbn);
             } else {
-                // TODO throw exception if book is in use
+                throw new RequestException(HttpStatus.NOT_FOUND, "Book with isbn " + isbn + "is in use");
             }
         } else {
-            // TODO throw exception if book not found
+            throw new RequestException(HttpStatus.NOT_FOUND, "Book with isbn " + isbn + "does not exist");
         }
     }
 
     public Book updateBook(Book book) {
         Optional<Book> bookToUpdate = bookRepository.findByISBN(book.getIsbn());
         if (!bookToUpdate.isPresent()) {
-            // TODO throw exception
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND, "Book with isbn " + book.getIsbn() + " does not exist, add it as a new book if necesary");
         }
         Book updatedBook = Book.builder().
             id(bookToUpdate.get().getId()).

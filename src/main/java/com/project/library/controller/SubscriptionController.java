@@ -6,6 +6,7 @@
 package com.project.library.controller;
 
 import com.project.library.service.SubscriptionService;
+import com.project.library.error.ErrorDTO;
 import com.project.library.model.Subscription;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,25 +35,23 @@ public class SubscriptionController {
 
     @Operation(summary = "Get the subscriptions list filtered by user nickname, book title and sort order")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Subscriptions listed", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Subscription.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Subscriptions not found", content = @Content) })
+        @ApiResponse(responseCode = "200", description = "Returns a list of the subscriptions acording to the given parameters", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Subscription.class)) }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))})
     @GetMapping("/list")
     public ResponseEntity<List<Subscription>> getList(
         @RequestParam(value = "nickname", required = false, defaultValue = "") String nickname,
         @RequestParam(value = "title", required = false, defaultValue = "") String title,
-        @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
         @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit
     ) {
-        List<Subscription> list = subscriptionService.getAllSubscriptions(nickname, title, order, limit);
+        List<Subscription> list = subscriptionService.getAllSubscriptions(nickname, title, limit);
         return ResponseEntity.ok(list);
     }
 
     @Operation(summary = "Get a subscription by its id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Subscription found", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Subscription.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Subscription not found", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Subscription not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @GetMapping("/{id}")
     public ResponseEntity<Subscription> getSubscription(@Parameter(description = "id of subscription to be searched") @PathVariable long id) {
         Subscription subscription = subscriptionService.getSubscriptionById(id);
@@ -62,8 +61,8 @@ public class SubscriptionController {
     @Operation(summary = "Add a new subscription")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Subscription added", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Subscription.class)) }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Subscription not added", content = @Content) })
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Order with given id not valid", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @PostMapping("/add")
     public ResponseEntity<Subscription> addSubscription(
         @Parameter(description = "id of the order to be upgraded as a subscription") 
@@ -78,8 +77,8 @@ public class SubscriptionController {
     @Operation(summary = "Update a subscription by its id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription updated", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Subscription.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Subscription not found", content = @Content) })
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Subscription not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @PutMapping("/{id}/update")
     public ResponseEntity<Subscription> updateSubscription(
         @Parameter(description = "id of subscription to be updated") 
@@ -87,15 +86,15 @@ public class SubscriptionController {
         @Parameter(description = "days to be added in the duration´s subscription") 
             @RequestParam Long plus) {
         Subscription subscription = subscriptionService.updateSubscription(id, plus);
-        logger.info("Updating subscription: {} , {} days added", subscription.getId(), plus);
+        logger.info("Updating subscription: {}, {} days added", subscription.getId(), plus);
         return ResponseEntity.ok(subscription);
     }
 
     @Operation(summary = "Delete a subscription by its id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription deleted", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Subscription not found", content = @Content) })
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Subscription not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))) })
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteSubscription(@Parameter(description = "id of subscription to be deleted") @PathVariable Long id) {
         subscriptionService.deleteSubscription(id);

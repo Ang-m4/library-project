@@ -6,8 +6,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.project.library.error.RequestException;
 import com.project.library.model.Book;
 import com.project.library.model.Order;
 import com.project.library.model.User;
@@ -45,8 +47,7 @@ public class OrderService {
     public Order getOrderById(Long id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isEmpty()) {
-            //TODO throw exception if order not found
-            return null;
+            throw new RequestException(HttpStatus.NOT_FOUND, "Order with id " + id + "was not found");
         }
         return order.get();
     }
@@ -55,16 +56,13 @@ public class OrderService {
         Optional<User> user = userRepository.findById(idUser);
         Optional<Book> book = bookRepository.findByISBN(isbn);
         if(user.isEmpty() || book.isEmpty()){
-            //TODO throw exception if arguments not valid
-            return null;
+            throw new RequestException(HttpStatus.BAD_REQUEST, "Invalid Arguments either user or book not exist");
         }
         if(book.get().getCopies() <= 0){
-            //TODO throw exception if book not avaliable
-            return null;
+            throw new RequestException(HttpStatus.NOT_ACCEPTABLE, "Book with isbn " + isbn + "is out of stock");
         }
         if(user.get().getRole() != "ROLE_USER" || user.get().isBlocked()){
-            //TODO throw exception if user cannot order books
-            return null;
+            throw new RequestException(HttpStatus.NOT_ACCEPTABLE, "Invalid arguments, either user block or not a reader");
         }
         Order newOrder = Order.builder()
             .book(book.get())
@@ -80,8 +78,7 @@ public class OrderService {
     public void deleteOrder(Long id){
         Optional<Order> orderToDelete = orderRepository.findById(id);
         if(orderToDelete.isEmpty()){
-            //TODO throw exception if order does not exist
-            return;
+            throw new RequestException(HttpStatus.NOT_FOUND, "Order with id " + id + " does not exist");
         }
         Book book = orderToDelete.get().getBook();
         book.setCopies(book.getCopies() + 1);
